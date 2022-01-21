@@ -1,16 +1,17 @@
 package ru.netology.web.test;
 
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
 import ru.netology.web.page.DashboardPage;
 import ru.netology.web.page.LoginPage;
+import ru.netology.web.page.TransferPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoneyTransferTest {
+
 
     @BeforeEach
     void setup() {
@@ -24,42 +25,54 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldTransferMoneyBetweenOwnCardsOnLimit() throws InterruptedException {
+    void shouldTransferMoneyBetweenFromFirstCardsOnLimit() throws InterruptedException {
         var dashboardPage = new DashboardPage();
-        int amount = 10000;  // сумма перевода
-        var initialFirstCardBalans = dashboardPage.getCardBalance(0); // начальный баланс карты 1
-        var initialSecondCardBalans = dashboardPage.getCardBalance(1);  // начальный баланс карты 2
-        //        перевод с первой карты на вторую
-        dashboardPage.transfer(amount, 0, 1);
-        var actualFirstCardBalance = dashboardPage.getCardBalance(0);
+        var transferPage = new TransferPage();
+        int amount = 1;
+        int debitCard = 1;
+        int creditCard = 2;
+        var initialFirstCardBalans = dashboardPage.getCardBalance(debitCard);
+        var initialSecondCardBalans = dashboardPage.getCardBalance(creditCard);
+        dashboardPage.selectTopUpButton(creditCard);
+        transferPage.transfer(amount, debitCard);
+        var actualFirstCardBalance = dashboardPage.getCardBalance(debitCard);
         assertEquals(initialFirstCardBalans - amount, actualFirstCardBalance);
-        var actualSecondCardBalans = dashboardPage.getCardBalance(1);
+        var actualSecondCardBalans = dashboardPage.getCardBalance(creditCard);
         assertEquals(initialSecondCardBalans + amount, actualSecondCardBalans);
-        // обратный перевод
-        dashboardPage.transfer(amount, 1, 0);
-        actualFirstCardBalance = dashboardPage.getCardBalance(0);
-        assertEquals(initialFirstCardBalans, actualFirstCardBalance);
-        actualSecondCardBalans = dashboardPage.getCardBalance(1);
-        assertEquals(initialSecondCardBalans, actualSecondCardBalans);
     }
 
-      @Test
-    void shouldTransferMoneyBetweenOwnCardsUnderLimit() throws InterruptedException {
+    @Test
+    void shouldTransferMoneyFromSecondCardsOnLimit() throws InterruptedException {
         var dashboardPage = new DashboardPage();
-        int amount = 100000;  // сумма перевода
-        var initialFirstCardBalans = dashboardPage.getCardBalance(0); // начальный баланс карты 1
-        var initialSecondCardBalans = dashboardPage.getCardBalance(1);  // начальный баланс карты 2
-        //        перевод с первой карты на вторую
-        dashboardPage.transfer(amount, 0, 1);
-        var actualFirstCardBalance = dashboardPage.getCardBalance(0);
+        var transferPage = new TransferPage();
+        int amount = 1000;
+        int debitCard = 2;
+        int creditCard = 1;
+        var initialFirstCardBalans = dashboardPage.getCardBalance(1);
+        var initialSecondCardBalans = dashboardPage.getCardBalance(2);
+        dashboardPage.selectTopUpButton(creditCard);
+        transferPage.transfer(amount, debitCard);
+        var actualFirstCardBalance = dashboardPage.getCardBalance(1);
+        assertEquals(initialFirstCardBalans + amount, actualFirstCardBalance);
+        var actualSecondCardBalans = dashboardPage.getCardBalance(2);
+        assertEquals(initialSecondCardBalans - amount, actualSecondCardBalans);
+
+    }
+
+    @Test
+    void shouldTransferMoneyFromSecondCardsUnderLimit() throws InterruptedException {
+        var dashboardPage = new DashboardPage();
+        var transferPage = new TransferPage();
+        int amount = 100000;
+        int debitCard = 1;
+        int creditCard = 2;
+        var initialFirstCardBalans = dashboardPage.getCardBalance(debitCard);
+        var initialSecondCardBalans = dashboardPage.getCardBalance(creditCard);
+        dashboardPage.selectTopUpButton(creditCard);
+        transferPage.transfer(amount, debitCard);
+        var actualFirstCardBalance = dashboardPage.getCardBalance(1);
         assertEquals(initialFirstCardBalans, actualFirstCardBalance);
-        var actualSecondCardBalans = dashboardPage.getCardBalance(1);
-        assertEquals(initialSecondCardBalans, actualSecondCardBalans);
-        // обратный перевод
-        dashboardPage.transfer(amount, 1, 0);
-        actualFirstCardBalance = dashboardPage.getCardBalance(0);
-        assertEquals(initialFirstCardBalans, actualFirstCardBalance);
-        actualSecondCardBalans = dashboardPage.getCardBalance(1);
+        var actualSecondCardBalans = dashboardPage.getCardBalance(2);
         assertEquals(initialSecondCardBalans, actualSecondCardBalans);
     }
 }
