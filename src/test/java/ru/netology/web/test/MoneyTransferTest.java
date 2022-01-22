@@ -25,7 +25,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldTransferMoneyBetweenFromFirstCardsOnLimit() throws InterruptedException {
+    void shouldTransferMoneyBetweenFromFirstCardsOnLimit(){
         var dashboardPage = new DashboardPage();
         var transferPage = new TransferPage();
         int amount = 1;
@@ -42,7 +42,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldTransferMoneyFromSecondCardsOnLimit() throws InterruptedException {
+    void shouldTransferMoneyFromSecondCardsOnLimit(){
         var dashboardPage = new DashboardPage();
         var transferPage = new TransferPage();
         int amount = 1000;
@@ -60,7 +60,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldTransferMoneyFromSecondCardsUnderLimit() throws InterruptedException {
+    void shouldTransferMoneyFromSecondCardsUnderLimit(){
         var dashboardPage = new DashboardPage();
         var transferPage = new TransferPage();
         int amount = 100000;

@@ -5,7 +5,6 @@ import lombok.Value;
 public class DataHelper {
 
 
-
     @Value
     public static class AuthInfo {
         private String login;
@@ -25,33 +24,14 @@ public class DataHelper {
         return new VerificationCode("12345");
     }
 
-
     @Value
     public static class CardNumbers {
-//        private String cardNumber;
 
-
-
-        public static String getCardNumber(int numberOfCard){
+        public static String getCardNumber(int numberOfCard) {
 
             String[] cardNumbers = {"5559 0000 0000 0001", "5559 0000 0000 0002"};
 
-            return  cardNumbers[numberOfCard];
+            return cardNumbers[numberOfCard];
         }
-
-
-
-//
-////        String[] cardNumbers = {"5559 0000 0000 0001", "5559 0000 0000 0002"};
-//        private ArrayList cardNumbers = new ArrayList<>();
-//
-//        public ArrayList getCardNumbers(int index) {
-//            cardNumbers.add("5559 0000 0000 0001");
-//            cardNumbers.add("5559 0000 0000 0002");
-//            return (ArrayList) cardNumbers.get(index);
-//        }
     }
-
-
-    ;
 }
